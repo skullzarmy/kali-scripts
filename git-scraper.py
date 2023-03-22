@@ -5,14 +5,15 @@ import sys
 import time
 import shutil
 import json
+import uuid
 
 # Define the search phrase, number of repositories to check, and offset from command-line arguments
 search_phrase = sys.argv[1]
 return_count = int(sys.argv[2]) if len(sys.argv) > 2 else 100
 offset = int(sys.argv[3]) if len(sys.argv) > 3 else 0
 
-# Define the name of the output folder based on the search phrase and current epoch time
-output_folder = search_phrase.replace(" ", "-") + "-" + str(int(time.time()))
+# Define the name of the output folder based on the search phrase and a random UUID
+output_folder = search_phrase.replace(" ", "-") + "-" + str(uuid.uuid4())
 
 # Create a new directory for the output
 os.mkdir(output_folder)
@@ -97,14 +98,15 @@ with open(os.path.join(output_folder, "report.md"), "w") as f:
     f.write(f"| Timestamp | {int(time.time())} |\n\n")
 
     # Write the log table to the report file
-    f.write("| Repository Name | URL | Issues Found |\n")
-    f.write("| --- | --- | --- |\n")
+    f.write("| Repository Name | URL | Issues Found | JSON File |\n")
+    f.write("| --- | --- | --- | --- |\n")
     total_issues = 0
     for repo_name, repo_log in log.items():
         print(f"Checking log for {repo_name}: {repo_log}")
         total_issues += repo_log["issues_found"]
+        json_link = f"[{repo_name}.json]({repo_name}/{repo_name}.json)"
         f.write(
-            f"| {repo_name} | [{repo_log['url']}]({repo_log['url']}) | {repo_log['issues_found']} |\n"
+            f"| {repo_name} | [{repo_log['url']}]({repo_log['url']}) | {repo_log['issues_found']} | {json_link} |\n"
         )
 
     # Write the summary to the report file
