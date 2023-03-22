@@ -70,18 +70,17 @@ for url in repository_urls:
             stderr=subprocess.STDOUT,
             cwd=repo_name,
         )
+    except subprocess.CalledProcessError as e:
+        print(e.output.decode())
+    finally:
 
         # Count the number of issues found in the report and store it in the log
         with open(report_file, "r") as f:
-            report = f.read()
-            print(report)
+            report = json.load(f)
         issues_found = len(report)
 
         log[repo_name] = {"url": url, "issues_found": issues_found}
         print(f"Issues found: {issues_found}")
-    except subprocess.CalledProcessError as e:
-        print(e.output.decode())
-    finally:
         # Delete the cloned repository
         shutil.rmtree(repo_name)
 
