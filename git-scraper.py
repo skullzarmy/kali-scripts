@@ -73,8 +73,8 @@ for url in repository_urls:
 
         # Count the number of issues found in the report and store it in the log
         with open(report_file, "r") as f:
-            report = f.read()
-        issues_found = len(json.loads(report))
+            report = json.load(f)
+        issues_found = len(report)
 
         log[repo_name] = {"url": url, "issues_found": issues_found}
         print(f"Issues found: {issues_found}")
