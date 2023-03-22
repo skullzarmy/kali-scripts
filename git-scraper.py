@@ -11,9 +11,9 @@ import uuid
 search_phrase = sys.argv[1]
 return_count = int(sys.argv[2]) if len(sys.argv) > 2 else 100
 offset = int(sys.argv[3]) if len(sys.argv) > 3 else 0
-
+uuid1 = str(uuid.uuid4())
 # Define the name of the output folder based on the search phrase and a random UUID
-output_folder = search_phrase.replace(" ", "-") + "-" + str(uuid.uuid4())
+output_folder = search_phrase.replace(" ", "-") + "-" + str(int(time.time()))
 
 # Create a new directory for the output
 os.mkdir(output_folder)
@@ -61,7 +61,7 @@ for url in repository_urls:
         subprocess.check_output(["git", "clone", url, repo_name])
 
         # Run gitleaks detect -v on the cloned repository
-        output_folder_for_repo = os.path.join(output_folder, repo_name)
+        output_folder_for_repo = os.path.join(output_folder, repo_name + "_" + str(uuid.uuid4()))
         os.mkdir(output_folder_for_repo)
         report_file = os.path.join(
             os.path.abspath(output_folder_for_repo), f"{repo_name}.json"
