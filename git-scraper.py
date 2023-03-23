@@ -6,6 +6,7 @@ import time
 import shutil
 import json
 import uuid
+from tqdm import tqdm
 
 # Define the search phrase, number of repositories to check, and offset from command-line arguments
 search_phrase = sys.argv[1]
@@ -53,7 +54,7 @@ for url in repository_urls:
     log[repo_name] = {"url": url, "issues_found": 0}
 
 # Loop through the repository URLs and run gitleaks detect -v on each repository
-for url in repository_urls:
+for url in tqdm(repository_urls, desc="Scanning repositories"):
     print(f"Scanning repository: {url}")
     try:
         # Clone the repository
