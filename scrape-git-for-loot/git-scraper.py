@@ -72,7 +72,7 @@ for url in tqdm(repository_urls, desc="Scanning repositories"):
             os.path.abspath(output_folder_for_repo), f"{repo_name}.json"
         )
         subprocess.check_output(
-            ["gitleaks", "detect", "-v", "-r", report_file],
+            ["gitleaks", "detect", "-r", report_file],
             stderr=subprocess.STDOUT,
             cwd=repo_name,
         )
