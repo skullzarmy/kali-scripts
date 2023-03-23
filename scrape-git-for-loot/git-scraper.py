@@ -28,7 +28,7 @@ os.mkdir(output_folder)
 api_url = "https://api.github.com/search/repositories"
 
 # Define the search parameters for the GitHub API
-params = {"q": search_phrase, "per_page": return_count, "page": (offset // return_count) + 1}
+params = {"q": search_phrase, "per_page": return_count, "page": (offset // return_count) + 1, "sort": "updated", "order": "desc"}
 
 # Send a GET request to the GitHub API to search for repositories
 response = requests.get(api_url, params=params)
