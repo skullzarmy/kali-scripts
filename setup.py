@@ -17,3 +17,7 @@ os.system("sudo apt install code")
 
 # Install OpenAI library
 os.system("sudo pip install openai")
+
+# Set desktop background
+image_path = os.path.abspath("./media/kali-bg.png")
+os.system("gsettings set org.gnome.desktop.background picture-uri 'file://" + image_path + "'")
