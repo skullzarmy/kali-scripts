@@ -12,7 +12,7 @@ from tqdm import tqdm
 search_phrase = sys.argv[1]
 return_count = int(sys.argv[2]) if len(sys.argv) > 2 else 100
 offset = int(sys.argv[3]) if len(sys.argv) > 3 else 0
-uuid1 = str(uuid.uuid4())
+
 # Define the name of the output folder based on the search phrase and a random UUID
 output_folder = search_phrase.replace(" ", "-") + "-" + str(int(time.time()))
 
@@ -51,7 +51,7 @@ else:
 log = {}
 for url in repository_urls:
     repo_name = url.split("/")[-1].replace(".git", "")
-    log[repo_name] = {"url": url, "issues_found": 0}
+    log[repo_name] = {"url": url, "issues_found": 0, "uuid": str(uuid.uuid4())}
 
 # Loop through the repository URLs and run gitleaks detect -v on each repository
 for url in tqdm(repository_urls, desc="Scanning repositories"):
@@ -62,7 +62,7 @@ for url in tqdm(repository_urls, desc="Scanning repositories"):
         subprocess.check_output(["git", "clone", url, repo_name])
 
         # Run gitleaks detect -v on the cloned repository
-        output_folder_for_repo = os.path.join(output_folder, repo_name + "_" + str(uuid.uuid4()))
+        output_folder_for_repo = os.path.join(output_folder, repo_name + "_" + log[repo_name]["uuid"])
         os.mkdir(output_folder_for_repo)
         report_file = os.path.join(
             os.path.abspath(output_folder_for_repo), f"{repo_name}.json"
@@ -105,7 +105,7 @@ with open(os.path.join(output_folder, "report.md"), "w") as f:
     for repo_name, repo_log in log.items():
         print(f"Checking log for {repo_name}: {repo_log}")
         total_issues += repo_log["issues_found"]
-        json_link = f"[{repo_name}.json]({os.path.join(repo_name, repo_name)}.json)"
+        json_link = f"[{repo_name}.json]({os.path.join(output_folder, repo_name + '_' + log[repo_name]['uuid'], repo_name + '.json')})"
         f.write(f"| {repo_name} | [{repo_log['url']}]({repo_log['url']}) | {repo_log['issues_found']} | {json_link} |\n")
 
     # Write the summary to the report file
