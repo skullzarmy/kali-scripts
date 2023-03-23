@@ -3,9 +3,6 @@ import sys
 import os
 from tqdm import tqdm
 
-# Enter your OpenAI API key here
-openai.api_key = "YOUR_API_KEY"
-
 # Function to test an API key and return it if it's valid
 def test_api_key(api_key):
     openai.api_key = api_key
@@ -36,8 +33,8 @@ with open(input_file, "r") as f:
             # Test the API key
             valid_key, error = test_api_key(api_key)
             # If the API key is valid, write it to the output file
-            if valid_key:
+            if not error:
                 out_f.write(valid_key + "\n")
             # If there was an error, write it to the error log file
-            if error:
+            else:
                 error_f.write(valid_key + "\t" + error + "\n")
