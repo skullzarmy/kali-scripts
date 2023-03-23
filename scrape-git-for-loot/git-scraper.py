@@ -55,19 +55,18 @@ else:
 # Define the log dictionary to store the issues found in each repository
 log = {}
 for url in repository_urls:
-    repo_name = url.split("/")[-1].replace(".git", "")
-    log[repo_name] = {"url": url, "issues_found": 0, "uuid": str(uuid.uuid4())}
+    log[url] = {"name": url.split("/")[-1].replace(".git", ""), "issues_found": 0, "uuid": str(uuid.uuid4())}
 
 # Loop through the repository URLs and run gitleaks detect -v on each repository
 for url in tqdm(repository_urls, desc="Scanning repositories"):
     print(f"Scanning repository: {url}")
     try:
         # Clone the repository
-        repo_name = url.split("/")[-1].replace(".git", "")
+        repo_name = log[url]["name"]
         subprocess.check_output(["git", "clone", url, repo_name])
 
         # Run gitleaks detect -v on the cloned repository
-        output_folder_for_repo = os.path.join(output_folder, repo_name + "_" + log[repo_name]["uuid"])
+        output_folder_for_repo = os.path.join(output_folder, repo_name + "_" + log[url]["uuid"])
         os.mkdir(output_folder_for_repo)
         report_file = os.path.join(
             os.path.abspath(output_folder_for_repo), f"{repo_name}.json"
@@ -86,7 +85,7 @@ for url in tqdm(repository_urls, desc="Scanning repositories"):
             report = json.load(f)
         issues_found = len(report)
 
-        log[repo_name]["issues_found"] = issues_found
+        log[url]["issues_found"] = issues_found
         print(f"Issues found: {issues_found}")
         # Delete the cloned repository
         shutil.rmtree(repo_name)
@@ -107,11 +106,12 @@ with open(os.path.join(output_folder, "report.md"), "w") as f:
     f.write("| Repository Name | URL | Issues Found | JSON File |\n")
     f.write("| --- | --- | --- | --- |\n")
     total_issues = 0
-    for repo_name, repo_log in log.items():
+    for url, repo_log in log.items():
+        repo_name = repo_log["name"]
         print(f"Checking log for {repo_name}: {repo_log}")
         total_issues += repo_log["issues_found"]
         json_link = f"[{repo_name}.json]({os.path.join(repo_name + '_' + repo_log['uuid'], repo_name + '.json')})"
-        f.write(f"| {repo_name} | [{repo_log['url']}]({repo_log['url']}) | {repo_log['issues_found']} | {json_link} |\n")
+        f.write(f"| {repo_name} | [{url}]({url}) | {repo_log['issues_found']} | {json_link} |\n")
 
         if repo_log['issues_found'] > 0:
             report_file_path = os.path.join(output_folder, repo_name + '_' + repo_log['uuid'], repo_name + '.json')
@@ -126,5 +126,3 @@ with open(os.path.join(output_folder, "report.md"), "w") as f:
     f.write("\n\n")
     f.write(f"Total issues found: {total_issues}\n")
     f.flush()
-
-    
