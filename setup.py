@@ -12,22 +12,20 @@ with tqdm(total=100, desc="Overall Progress") as pbar:
     print("  - VS Code extensions")
     print("  - VS Code themes")
     print("  - openai for python")
-    # draw a horizontal rule with figlet
-    os.system("figlet -f slant '------------------------'")
-    os.system("figlet -f slant '------------------------'")
+    os.system("figlet -f slant '|||||||||||||||||||||||||||'")
     pbar.update(10)
 
     
-    # Update apt
+    print("Update apt")
     os.system("sudo apt update")
     pbar.update(10)
     
-    # Install gitleaks
+    print("Install gitleaks")
     os.system("sudo apt install gitleaks")
     pbar.update(10)
     
-    # Install latest version of VS Code
-    # if microsoft.gpg does not exists on disk
+    print("Install latest version of VS Code")
+    print("if microsoft.gpg does not exists on disk")
     if not os.path.exists("microsoft.gpg"):
         os.system("curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg")
         os.system("sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/")
@@ -36,7 +34,7 @@ with tqdm(total=100, desc="Overall Progress") as pbar:
     os.system("sudo apt install code")
     pbar.update(30)
     
-    # Install VS Code extensions
+    print("Install VS Code extensions")
     os.system("code --install-extension akamud.vscode-theme-onedark")
     os.system("code --install-extension formulahendry.auto-rename-tag")
     os.system("code --install-extension ms-azuretools.vscode-docker")
@@ -46,8 +44,11 @@ with tqdm(total=100, desc="Overall Progress") as pbar:
     os.system("code --install-extension chakrounAnas.turbo-console-log")
     pbar.update(30)
     
-    # Install OpenAI library
+    print("Install OpenAI library")
     os.system("sudo pip install openai")
     pbar.update(10)
     
 pbar.close()
+
+os.system("figlet -f slant 'DONE'")
+print("Happy hunting!")
