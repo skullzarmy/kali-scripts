@@ -115,8 +115,8 @@ with open(os.path.join(output_folder, "report.md"), "w") as f:
 
         if repo_log['issues_found'] > 0:
             report_file_path = os.path.join(output_folder, repo_name + '_' + repo_log['uuid'], repo_name + '.json')
-            with open(report_file_path, 'r') as f:
-                report = json.load(f)
+            with open(report_file_path, 'r') as f_report:
+                report = json.load(f_report)
                 for issue in report:
                     if 'Secret' in issue and issue['Secret'].startswith('sk-'):
                         with open('scraped.txt', 'a') as f_scraped:
