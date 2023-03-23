@@ -105,7 +105,7 @@ with open(os.path.join(output_folder, "report.md"), "w") as f:
     for repo_name, repo_log in log.items():
         print(f"Checking log for {repo_name}: {repo_log}")
         total_issues += repo_log["issues_found"]
-        json_link = f"[{repo_name}.json]({os.path.join(output_folder, repo_name + '_' + log[repo_name]['uuid'], repo_name + '.json')})"
+        json_link = f"[{repo_name}.json]({os.path.join(output_folder, repo_name + '_' + repo_log['uuid'], repo_name + '.json')})"
         f.write(f"| {repo_name} | [{repo_log['url']}]({repo_log['url']}) | {repo_log['issues_found']} | {json_link} |\n")
 
     # Write the summary to the report file
