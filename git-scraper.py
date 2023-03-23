@@ -8,6 +8,11 @@ import json
 import uuid
 from tqdm import tqdm
 
+# Check if scraped.txt file exists and create it if it doesn't
+if not os.path.exists('scraped.txt'):
+    with open('scraped.txt', 'w') as f:
+        pass
+
 # Define the search phrase, number of repositories to check, and offset from command-line arguments
 search_phrase = sys.argv[1]
 return_count = int(sys.argv[2]) if len(sys.argv) > 2 else 100
@@ -108,7 +113,18 @@ with open(os.path.join(output_folder, "report.md"), "w") as f:
         json_link = f"[{repo_name}.json]({os.path.join(repo_name + '_' + repo_log['uuid'], repo_name + '.json')})"
         f.write(f"| {repo_name} | [{repo_log['url']}]({repo_log['url']}) | {repo_log['issues_found']} | {json_link} |\n")
 
+        if repo_log['issues_found'] > 0:
+            report_file_path = os.path.join(output_folder, repo_name + '_' + repo_log['uuid'], repo_name + '.json')
+            with open(report_file_path, 'r') as f:
+                report = json.load(f)
+                for issue in report:
+                    if 'Secret' in issue and issue['Secret'].startswith('sk-'):
+                        with open('scraped.txt', 'a') as f_scraped:
+                            f_scraped.write(issue['Secret'] + '\n')
+
     # Write the summary to the report file
     f.write("\n\n")
     f.write(f"Total issues found: {total_issues}\n")
     f.flush()
+
+    
