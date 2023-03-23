@@ -63,8 +63,9 @@ for url in repository_urls:
         # Run gitleaks detect -v on the cloned repository
         output_folder_for_repo = os.path.join(output_folder, repo_name + "_" + str(uuid.uuid4()))
         os.mkdir(output_folder_for_repo)
-        report_file = os.path.join(output_folder_for_repo, f"{repo_name}.json")
-
+        report_file = os.path.join(
+            os.path.abspath(output_folder_for_repo), f"{repo_name}.json"
+        )
         subprocess.check_output(
             ["gitleaks", "detect", "-v", "-r", report_file],
             stderr=subprocess.STDOUT,
