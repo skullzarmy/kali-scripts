@@ -81,7 +81,7 @@ for url in tqdm(repository_urls, desc="Scanning repositories"):
             report = json.load(f)
         issues_found = len(report)
 
-        log[repo_name] = {"url": url, "issues_found": issues_found}
+        log[repo_name]["issues_found"] = issues_found
         print(f"Issues found: {issues_found}")
         # Delete the cloned repository
         shutil.rmtree(repo_name)
