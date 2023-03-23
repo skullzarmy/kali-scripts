@@ -15,9 +15,15 @@ def concatenate_json_files(json_files, output_file_path):
     for file_path in json_files:
         with open(file_path) as f:
             file_content = json.load(f)
-            master_json.update(file_content)
+            if isinstance(file_content, dict):
+                master_json.update(file_content)
+            elif isinstance(file_content, list):
+                if "concat_json_list" not in master_json:
+                    master_json["concat_json_list"] = []
+                master_json["concat_json_list"].extend(file_content)
     with open(output_file_path, "w") as f:
         f.write(json.dumps(master_json, indent=4))
+
 
 if __name__ == "__main__":
     folder_path = sys.argv[1]
