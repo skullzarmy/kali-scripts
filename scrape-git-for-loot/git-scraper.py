@@ -67,7 +67,8 @@ for url in tqdm(repository_urls, desc="Scanning repositories"):
 
         # Run gitleaks detect -v on the cloned repository
         output_folder_for_repo = os.path.join(output_folder, repo_name + "_" + log[url]["uuid"])
-        os.mkdir(output_folder_for_repo)
+        if not os.path.exists(output_folder_for_repo):
+            os.mkdir(output_folder_for_repo)
         report_file = os.path.join(
             os.path.abspath(output_folder_for_repo), f"{repo_name}.json"
         )
