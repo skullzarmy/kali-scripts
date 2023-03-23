@@ -4,6 +4,19 @@ from tqdm import tqdm
 
 # wrap everything in a tqdm progress bar so I can see overall progress of the script
 with tqdm(total=100, desc="Overall Progress") as pbar:
+    os.system("figlet -f slant 'skullzarmy'")
+    print("Welcome to skullzarmy's Kali setup script!")
+    print("This script will install the following tools:")
+    print("  - gitleaks")
+    print("  - VS Code")
+    print("  - VS Code extensions")
+    print("  - VS Code themes")
+    print("  - openai for python")
+    # draw a horizontal rule with figlet
+    os.system("figlet -f slant '------------------------'")
+    os.system("figlet -f slant '------------------------'")
+    pbar.update(10)
+
     
     # Update apt
     os.system("sudo apt update")
@@ -21,7 +34,7 @@ with tqdm(total=100, desc="Overall Progress") as pbar:
         os.system("sudo sh -c 'echo \"deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main\" > /etc/apt/sources.list.d/vscode.list'")
     os.system("sudo apt update")
     os.system("sudo apt install code")
-    pbar.update(20)
+    pbar.update(30)
     
     # Install VS Code extensions
     os.system("code --install-extension akamud.vscode-theme-onedark")
